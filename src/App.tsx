@@ -44,6 +44,30 @@ function App() {
   const [selectedElement,setSelectedElement]=useState<Element | null>(null);
 
 
+  // initialize canvas and handle window resizing
+  useEffect(()=>{
+    if(canvasRef.current){
+      // access to canvas DOM element
+      const canvas=canvasRef.current;
+      // initializing 2d drawing context of the canvas
+      const context=canvas.getContext('2d');
+      // stores the 2D context in the components state making it accessible for drawing operations elsewhere in the component
+      setCtx(context);
+
+      const resizeCanvas = () =>{
+        // set the dimensions of the canvas to full height and width of brower window
+        canvas.width=window.innerWidth;
+        canvas.height=window.innerHeight;
+        // redraws the existing elements on the canvas after resisizing to avoid clearing any previously drawn content
+        redrawCanvas();
+      };
+      resizeCanvas();
+      // this ensures every time the browser window is resized the resizeCanvas function is called to adjust the canvas dimenstions and redraw its content 
+      window.addEventListener('resize',resizeCanvas);
+      // ensures no memory leaks
+      return () => window.removeEventListener('resize',resizeCanvas);
+    }
+  },[]);
 
 
 
