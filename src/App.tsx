@@ -111,7 +111,84 @@ function App() {
     }
   };
 
+  // The redrawCanvas function is responsible for redrawing the entire canvas by iterating through all the elements and rendering them based on their type, styles, and properties
 
+  const redrawCanvas = () => {
+    // ensures the drawing context and the canvas reference are available
+    if (!ctx || !canvasRef.current) return;
+
+// clears the entire canvas by removing any existing drawings ensuring the new render starts with a blank slate
+    ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+
+// iterate through all the elment to redraw each one
+    elements.forEach(element => {
+      // sets the stroke and fill colors for the current element 
+      ctx.strokeStyle = element.color;
+      ctx.fillStyle = element.color;
+
+      // Draw selection highlight
+      if (element.selected) {
+        ctx.save();
+        ctx.strokeStyle = '#4299e1'; // Blue highlight
+        ctx.lineWidth = 2;
+        ctx.setLineDash([5, 5]);
+      }
+// rendering elements by thier type
+      switch(element.type) {
+        case 'rectangle':
+          ctx.strokeRect(
+            element.startX,
+            element.startY,
+            element.endX - element.startX,
+            element.endY - element.startY
+          );
+          break;
+
+        case 'ellipse':
+          ctx.beginPath();
+          ctx.ellipse(
+            element.startX,
+            element.startY,
+            Math.abs(element.endX - element.startX),
+            Math.abs(element.endY - element.startY),
+            0, 0, 2 * Math.PI
+          );
+          ctx.stroke();
+          break;
+
+        case 'line':
+          ctx.beginPath();
+          ctx.moveTo(element.startX, element.startY);
+          ctx.lineTo(element.endX, element.endY);
+          ctx.stroke();
+          break;
+
+        case 'freehand':
+          if (element.points) {
+            ctx.beginPath();
+            ctx.moveTo(element.points[0][0], element.points[0][1]);
+            element.points.forEach(point => {
+              ctx.lineTo(point[0], point[1]);
+            });
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+          }
+          break;
+
+        case 'text':
+          if (element.text) {
+            ctx.font = '16px Inter, sans-serif';
+            ctx.fillText(element.text, element.startX, element.startY);
+          }
+          break;
+      }
+
+      if (element.selected) {
+        ctx.restore();
+      }
+    });
+  };
 
 
 
