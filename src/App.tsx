@@ -70,6 +70,46 @@ function App() {
   },[]);
 
 
+  // This function, isPointInElement, determines whether a given point (with coordinates x and y) falls within or near a specified element (such as a rectangle, ellipse, or line). It is typically used for selecting or interacting with drawn elements on a canvas.
+
+  const isPointInElement = (x: number, y: number, element: Element) => {
+    const padding = 5; // Padding for easier selection
+    
+    switch(element.type) {
+
+//Logic: Checks if the point (x, y) lies within the bounds of the rectangle, including the additional padding.
+// Math.min and Math.max: Handle rectangles drawn in any direction
+
+      case 'rectangle':
+        const minX = Math.min(element.startX, element.endX) - padding;
+        const maxX = Math.max(element.startX, element.endX) + padding;
+        const minY = Math.min(element.startY, element.endY) - padding;
+        const maxY = Math.max(element.startY, element.endY) + padding;
+        return x >= minX && x <= maxX && y >= minY && y <= maxY;
+    
+        // uses standard elipse equations and ddetermines whether a point inside or near the ellipse
+        
+      case 'ellipse':
+        const centerX = element.startX;
+        const centerY = element.startY;
+        const radiusX = Math.abs(element.endX - element.startX) + padding;
+        const radiusY = Math.abs(element.endY - element.startY) + padding;
+        return Math.pow((x - centerX) / radiusX, 2) + Math.pow((y - centerY) / radiusY, 2) <= 1;
+      
+        // uses the formula for the shortes distance from a point to a line and LinesWidth add tolerance for selecting a line ,accounting for the fact that lines have no inherent thickeness
+
+      case 'line':
+        const lineWidth = 10; // Line selection tolerance
+        const dx = element.endX - element.startX;
+        const dy = element.endY - element.startY;
+        const length = Math.sqrt(dx * dx + dy * dy);
+        const distance = Math.abs((dy * x - dx * y + element.endX * element.startY - element.endY * element.startX) / length);
+        return distance <= lineWidth;
+      
+      default:
+        return false;
+    }
+  };
 
 
 
