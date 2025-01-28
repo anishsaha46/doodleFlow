@@ -190,6 +190,90 @@ function App() {
     });
   };
 
+  // The startDrawing function initializes the drawing process or handles selection/text input based on the current tool
+
+  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+
+    // retrieves the canvas dom using canvasRef and if the canvas is not available the function  exits early
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    // Converts these coordinates to canvas space using getBoundingClientRect() to account for offsets like margins, borders, or scrolling.
+    const rect = canvas.getBoundingClientRect();
+
+    // Determines the mouse/touch event's coordinates (clientX, clientY).
+    // Uses the touches property if the event is a touch event, otherwise uses clientX and clientY
+
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+    const startX = clientX - rect.left;
+    const startY = clientY - rect.top;
+
+    if (currentTool === 'select') {
+      // Deselect all elements first
+      setElements(prev => prev.map(el => ({ ...el, selected: false })));
+      
+      // Find clicked element
+      const clickedElement = [...elements].reverse().find(el => 
+        isPointInElement(startX, startY, el)
+      );
+
+// If a clicked element is found:
+// Updates the selectedElement state.
+// Marks the element as selected by setting its selected property to true.
+// If no element is found, deselects all by setting selectedElement to null.
+      if (clickedElement) {
+        setSelectedElement(clickedElement);
+        setElements(prev => prev.map(el => 
+          el === clickedElement ? { ...el, selected: true } : el
+        ));
+      } else {
+        setSelectedElement(null);
+      }
+      return;
+    }
+
+    if (currentTool === 'text') {
+      const text = prompt('Enter text:');
+      if (text) {
+        const textElement = {
+          type: 'text',
+          startX,
+          startY,
+          endX: startX,
+          endY: startY,
+          text,
+          color: currentColor
+        };
+        setElements(prev => [...prev, textElement]);
+        redrawCanvas();
+      }
+      return;
+    }
+
+    setIsDrawing(true);
+
+    const newElement = currentTool === 'freehand'
+      ? {
+          type: 'freehand',
+          startX,
+          startY,
+          endX: startX,
+          endY: startY,
+          points: [[startX, startY]] as [number, number][],
+          color: currentColor
+        }
+      : {
+          type: currentTool,
+          startX,
+          startY,
+          endX: startX,
+          endY: startY,
+          color: currentColor
+        };
+
+    setCurrentElement(newElement);
+  };
 
 
 }
