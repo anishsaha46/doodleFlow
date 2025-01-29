@@ -376,5 +376,16 @@ function App() {
     redrawCanvas();
   };
 
+  // The handleUndo function removes the most recently drawn element from the elements state, effectively undoing the last action.
+
+  const handleUndo = () => {
+    if(elements.length > 0){
+      setElements(prev => prev.slice(0, -1));
+      redrawCanvas();
+    }
+  };
+
+
+
 }
 export default App
