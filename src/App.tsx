@@ -358,6 +358,23 @@ function App() {
     }
   };
 
+  // This function handles the mouseup event, which signals the end of drawing and adds the current element to the elements array.
+  
+  const stopDrawing = () => {
+    // Early exit if drawing is not in progress or the current tool is not freehand or text
+    if (!isDrawing || currentTool === 'select' || currentTool === 'text') return;
+
+// If currentElement exists, it is added to the list of drawn elements 
+    if (currentElement) {
+      setElements(prev => [...prev, currentElement]);
+    }
+    // stops the drawing action
+    setIsDrawing(false);
+    // clears the current element state
+    setCurrentElement(null);
+    // calls redrawcanvas to render all stored element ensuring the finalized shape appears correctly
+    redrawCanvas();
+  };
 
 }
 export default App
