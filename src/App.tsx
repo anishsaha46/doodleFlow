@@ -27,7 +27,7 @@ function App() {
   // refrences the canvas Element to draw on
   const canvasRef=useRef<HTMLCanvasElement>(null);
   // stores the canvas context for rendering
-  const [ctx,setCtx]-useState<CanvasRenderingContext2D | null>(null);
+  const [ctx,setCtx]=useState<CanvasRenderingContext2D | null>(null);
   // tracks the currently selected tool (eg rectangle , line ,text,etc);
   const [currentTool,setCurrentTool]=useState('select');
   // stores the currently selected color
@@ -402,6 +402,104 @@ function App() {
       alert('Failed to export image. Check browser permissions.');
     }
   };
+
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-2 flex items-center gap-2">
+        <button
+          onClick={() => setCurrentTool('select')}
+          className={`p-2 rounded-md hover:bg-gray-100 transition-colors ${currentTool === 'select' ? 'bg-gray-100' : ''}`}
+          title="Select"
+        >
+          <MousePointer className="w-5 h-5" />
+        </button>
+        <button
+          onClick={() => setCurrentTool('rectangle')}
+          className={`p-2 rounded-md hover:bg-gray-100 transition-colors ${currentTool === 'rectangle' ? 'bg-gray-100' : ''}`}
+          title="Rectangle"
+        >
+          <Square className="w-5 h-5" />
+        </button>
+        <button
+          onClick={() => setCurrentTool('ellipse')}
+          className={`p-2 rounded-md hover:bg-gray-100 transition-colors ${currentTool === 'ellipse' ? 'bg-gray-100' : ''}`}
+          title="Ellipse"
+        >
+          <Circle className="w-5 h-5" />
+        </button>
+        <button
+          onClick={() => setCurrentTool('line')}
+          className={`p-2 rounded-md hover:bg-gray-100 transition-colors ${currentTool === 'line' ? 'bg-gray-100' : ''}`}
+          title="Line"
+        >
+          <Minus className="w-5 h-5" />
+        </button>
+        <button
+          onClick={() => setCurrentTool('freehand')}
+          className={`p-2 rounded-md hover:bg-gray-100 transition-colors ${currentTool === 'freehand' ? 'bg-gray-100' : ''}`}
+          title="Freehand"
+        >
+          <Edit3 className="w-5 h-5" />
+        </button>
+        <button
+          onClick={() => setCurrentTool('text')}
+          className={`p-2 rounded-md hover:bg-gray-100 transition-colors ${currentTool === 'text' ? 'bg-gray-100' : ''}`}
+          title="Text"
+        >
+          <Type className="w-5 h-5" />
+        </button>
+        <div className="relative">
+          <button
+            onClick={() => setShowColorPicker(!showColorPicker)}
+            className="p-2 rounded-md hover:bg-gray-100 transition-colors"
+            title="Color"
+          >
+            <Palette className="w-5 h-5" style={{ color: currentColor }} />
+          </button>
+          <input
+            type="color"
+            value={currentColor}
+            onChange={(e) => setCurrentColor(e.target.value)}
+            className={`absolute top-full left-0 mt-2 w-8 h-8 cursor-pointer ${showColorPicker ? 'block' : 'hidden'}`}
+          />
+        </div>
+        <div className="w-px h-6 bg-gray-200 mx-1" />
+        <button
+          onClick={handleUndo}
+          className="p-2 rounded-md hover:bg-gray-100 transition-colors"
+          title="Undo"
+        >
+          <Undo2 className="w-5 h-5" />
+        </button>
+        <button
+          onClick={handleExport}
+          className="p-2 rounded-md hover:bg-gray-100 transition-colors"
+          title="Export"
+        >
+          <Download className="w-5 h-5" />
+        </button>
+      </div>
+
+      <canvas
+        ref={canvasRef}
+        className="touch-none"
+        onMouseDown={startDrawing}
+        onMouseMove={draw}
+        onMouseUp={stopDrawing}
+        onMouseOut={stopDrawing}
+        onTouchStart={(e) => {
+          e.preventDefault();
+          startDrawing(e);
+        }}
+        onTouchMove={(e) => {
+          e.preventDefault();
+          draw(e);
+        }}
+        onTouchEnd={stopDrawing}
+      />
+    </div>
+  );
 
 
 
