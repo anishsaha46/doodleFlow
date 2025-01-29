@@ -275,6 +275,89 @@ function App() {
     setCurrentElement(newElement);
   };
 
+  // This function handles real-time drawing on the canvas while the user is actively drawing with the mouse or touch input.
+
+  const draw = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+
+    // Early exit if drawing is not in progress or the current tool is not freehand or text
+    if (!isDrawing || currentTool === 'select' || currentTool === 'text' || !ctx || !canvasRef.current || !currentElement) return;
+
+    // Converts these coordinates to canvas space using getBoundingClientRect() to account for offsets like margins, borders, or scrolling.
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+
+    // Creates a copy of the current element and updates its properties based on the current tool and mouse/touch coordinates.
+    const updatedElement = { ...currentElement };
+
+    // Adds the current mouse/touch coordinates to the points array for freehand drawing.
+    if (currentTool === 'freehand' && updatedElement.points) {
+      updatedElement.points.push([x, y]);
+    } else {
+      updatedElement.endX = x;
+      updatedElement.endY = y;
+    }
+
+    // Updates the current element with the updated properties and redraws the canvas with the new element.
+    setCurrentElement(updatedElement);
+    redrawCanvas();
+
+// Sets the stroke color using ctx.strokeStyle = currentColor.
+// Depending on currentTool, it draws the appropriate shape
+    ctx.strokeStyle = currentColor;
+    switch(currentTool) {
+
+      // Uses strokeRect() to draw from (startX, startY) to (x, y).
+
+      case 'rectangle':
+        ctx.strokeRect(
+          updatedElement.startX,
+          updatedElement.startY,
+          x - updatedElement.startX,
+          y - updatedElement.startY
+        );
+        break;
+
+// Uses ellipse() to draw an oval centered at (startX, startY), with horizontal and vertical radii calculated from x and y
+      case 'ellipse':
+        ctx.beginPath();
+        ctx.ellipse(
+          updatedElement.startX,
+          updatedElement.startY,
+          Math.abs(x - updatedElement.startX),
+          Math.abs(y - updatedElement.startY),
+          0, 0, 2 * Math.PI
+        );
+        ctx.stroke();
+        break;
+
+        // Uses moveTo(startX, startY) and lineTo(x, y) to create a straight line
+      case 'line':
+        ctx.beginPath();
+        ctx.moveTo(updatedElement.startX, updatedElement.startY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        break;
+
+// Iterates through points[], connecting them with lineTo() to create a smooth hand-drawn effect.
+      case 'freehand':
+        if (updatedElement.points) {
+          ctx.beginPath();
+          ctx.moveTo(updatedElement.points[0][0], updatedElement.points[0][1]);
+          updatedElement.points.forEach(point => {
+            ctx.lineTo(point[0], point[1]);
+          });
+          ctx.lineWidth = 2;
+          ctx.lineCap = 'round';
+          ctx.stroke();
+        }
+        break;
+    }
+  };
+
 
 }
 export default App
