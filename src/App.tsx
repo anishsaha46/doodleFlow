@@ -385,6 +385,24 @@ function App() {
     }
   };
 
+  // The handleExport function allows users to export their drawing as a PNG image by converting the canvas content into an image file and triggering a download.
+  const handleExport = () => {
+    if (!canvasRef.current) return;
+    
+    try {
+      const dataURL = canvasRef.current.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.download = 'drawing.png';
+      link.href = dataURL;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Export failed:', error);
+      alert('Failed to export image. Check browser permissions.');
+    }
+  };
+
 
 
 }
