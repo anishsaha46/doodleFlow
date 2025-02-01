@@ -406,7 +406,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-2 flex items-center gap-2">
+      <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-2 flex items-center gap-2 justify-center">
         <button
           onClick={() => setCurrentTool('select')}
           className={`p-2 rounded-md hover:bg-gray-100 transition-colors ${currentTool === 'select' ? 'bg-gray-100' : ''}`}
