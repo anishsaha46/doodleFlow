@@ -54,6 +54,12 @@ function App() {
   const [showColorPicker,setShowColorPicker]=useState(false);
   // keeps track of the cuurently selected elements
   const [selectedElement,setSelectedElement]=useState<Element | null>(null);
+  // keeps track of the previous cursor positions
+  const [cursors,setCursors] = useState<{[key:string]:CursorPosition}>({});
+  const [resizeHandle,setResizeHandle] = useState<string | null>(null);
+  
+  const [isRotating,setIsRotating] = useState(false);
+  const [initialAngle,setInitialAngle] = useState(0);
 
 
   // initialize canvas and handle window resizing
