@@ -28,7 +28,13 @@ interface Element {
   scale?: {x:number; y:number};
 }
 
+interface CursorPosition {
+  userId:string;
+  x: number;
+  y: number;
+}
 
+const socket = io('http://localhost:3001');
 function App() {
   // refrences the canvas Element to draw on
   const canvasRef=useRef<HTMLCanvasElement>(null);
