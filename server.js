@@ -33,3 +33,7 @@ io.on('connection',(socket)=>{
 
 io.emit('userCount',connectedUsers.size);
 
+socket.on('draw',(data)=>{
+    socket.broadcast.emit('draw',data);
+});
+
