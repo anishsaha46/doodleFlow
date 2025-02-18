@@ -74,6 +74,13 @@ useEffect(()=>{
   }
 },[]);
 
+// Auto save Drawings whenever they change
+useEffect(()=>{
+  if(elements.length > 0){
+    localStorage.setItem('drawings', JSON.stringify(elements));
+  }
+},[elements]);
+
 
   // initialize canvas and handle window resizing
   useEffect(()=>{
