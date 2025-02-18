@@ -22,6 +22,10 @@ interface Element {
   text?:string;
   // selection state for the element
   selected?:boolean;
+  // position of the element
+  rotation?:number;
+  // scale factor for the element
+  scale?: {x:number; y:number};
 }
 
 
