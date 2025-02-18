@@ -37,3 +37,8 @@ socket.on('draw',(data)=>{
     socket.broadcast.emit('draw',data);
 });
 
+socket.on('cursorMove',(data) => {
+    socket.broadcast.emit('cursorMove',{
+        ...data,userId:socket.id
+    });
+});
