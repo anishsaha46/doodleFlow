@@ -42,3 +42,10 @@ socket.on('cursorMove',(data) => {
         ...data,userId:socket.id
     });
 });
+
+socket.on('disconnect',()=>{
+    console.log('User disconnected',socket.id);
+    connectedUsers.delete(socket.id);
+    io.emit('userCount',connectedUsers.size);
+    io.emit('userDisconnect',socket.id);
+})
