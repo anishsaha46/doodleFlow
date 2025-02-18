@@ -1,5 +1,7 @@
 import React , {useEffect,useState,useRef} from 'react';
-import { Square, Circle, Minus, Edit3, Type, Undo2, Download, MousePointer, Palette } from 'lucide-react';
+import { Square, Circle, Minus, Edit3, Type, Undo2, Download, MousePointer, Palette,Users,Save,Upload,ArrowRight } from 'lucide-react';
+import { io } from 'socket.io-client';
+
 
 interface Element {
   // type of shape
