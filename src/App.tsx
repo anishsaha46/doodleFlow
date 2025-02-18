@@ -61,6 +61,19 @@ function App() {
   const [isRotating,setIsRotating] = useState(false);
   const [initialAngle,setInitialAngle] = useState(0);
 
+// Load saved Drawings when the components mount
+useEffect(()=>{
+  const savedDrawings = localStorage.getItem('drawings');
+  if(savedDrawings){
+    try {
+      const parsedDrawings = JSON.parse(savedDrawings);
+      setElements(parsedDrawings);
+    } catch(error){
+      console.error('Error parsing saved drawings:', error);
+    }
+  }
+},[]);
+
 
   // initialize canvas and handle window resizing
   useEffect(()=>{
