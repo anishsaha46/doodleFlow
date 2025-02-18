@@ -22,5 +22,14 @@ const io = new Server(server,{
         origin: "http://localhost:5173",
         methods: ["GET", "POST"]
     }
+});
+
+const connectedUsers = new Set();
+
+io.on('connection',(socket)=>{
+    console.log('New user connected');
+    connectedUsers.add(socket.id);
 })
+
+io.emit('userCount',connectedUsers.size);
 
