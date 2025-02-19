@@ -102,6 +102,11 @@ useEffect(()=>{
       resizeCanvas();
       // this ensures every time the browser window is resized the resizeCanvas function is called to adjust the canvas dimenstions and redraw its content 
       window.addEventListener('resize',resizeCanvas);
+
+      socket.on('draw',(newElement:Element) = > {
+        setElements(prev => [...prev,newElement]);
+      });
+      
       // ensures no memory leaks
       return () => window.removeEventListener('resize',resizeCanvas);
     }
