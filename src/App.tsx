@@ -156,6 +156,20 @@ useEffect(()=>{
     }
   };
 
+  const drawElement = (element:Element)=>{
+    if(!ctx) return;
+    ctx.save();
+    ctx.strokeStyle = element.color;
+    ctx.fillStyle = element.color;
+
+    if(element.rotation){
+      const centerX = (element.startX + element.endX)/2;
+      const centerY = (element.startY + element.endY)/2;
+      ctx.translate(centerX, centerY);
+      ctx.rotate(element.rotation);
+      ctx.translate(-centerX, -centerY);
+    }
+  }
 
 //   // This function, isPointInElement, determines whether a given point (with coordinates x and y) falls within or near a specified element (such as a rectangle, ellipse, or line). It is typically used for selecting or interacting with drawn elements on a canvas.
 
