@@ -111,7 +111,14 @@ useEffect(()=>{
 
       socket.on('userCount',(count:number) => {
         setConnectedUsers(count);
-      })
+      });
+
+      socket.on('cursorMove', (data: CursorPosition) => {
+        setCursors(prev => ({
+          ...prev,
+          [data.userId]: { x: data.x, y: data.y, userId: data.userId }
+        }));
+      });
 
       // ensures no memory leaks
       return () => window.removeEventListener('resize',resizeCanvas);
