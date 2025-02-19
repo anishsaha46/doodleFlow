@@ -61,6 +61,8 @@ function App() {
   const [isRotating,setIsRotating] = useState(false);
   const [initialAngle,setInitialAngle] = useState(0);
 
+  const [connectedUsers , setConnectedUsers] = useState(0);
+
 // Load saved Drawings when the components mount
 useEffect(()=>{
   const savedDrawings = localStorage.getItem('drawings');
@@ -103,10 +105,14 @@ useEffect(()=>{
       // this ensures every time the browser window is resized the resizeCanvas function is called to adjust the canvas dimenstions and redraw its content 
       window.addEventListener('resize',resizeCanvas);
 
-      socket.on('draw',(newElement:Element) = > {
-        setElements(prev => [...prev,newElement]);
+      socket.on('draw', (newElement: Element) => {
+        setElements(prev => [...prev, newElement]);
       });
-      
+
+      socket.on('userCount',(count:number) => {
+        setConnectedUsers(count);
+      })
+
       // ensures no memory leaks
       return () => window.removeEventListener('resize',resizeCanvas);
     }
