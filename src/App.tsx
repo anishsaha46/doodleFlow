@@ -127,11 +127,17 @@ useEffect(()=>{
           return newCursors;
         });
       });
-      
+
       // ensures no memory leaks
-      return () => window.removeEventListener('resize',resizeCanvas);
+      return () => {
+        window.removeEventListener('resize', resizeCanvas);
+        socket.off('draw');
+        socket.off('userCount');
+        socket.off('cursorMove');
+        socket.off('userDisconnected');
+      };
     }
-  },[]);
+  }, []);
 
 
   // This function, isPointInElement, determines whether a given point (with coordinates x and y) falls within or near a specified element (such as a rectangle, ellipse, or line). It is typically used for selecting or interacting with drawn elements on a canvas.
