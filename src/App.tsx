@@ -120,6 +120,14 @@ useEffect(()=>{
         }));
       });
 
+      socket.on('userDisconnected', (userId : string) =>{
+        setCursors(prev => {
+          const newCursors = { ...prev };
+          delete newCursors[userId];
+          return newCursors;
+        });
+      });
+      
       // ensures no memory leaks
       return () => window.removeEventListener('resize',resizeCanvas);
     }
