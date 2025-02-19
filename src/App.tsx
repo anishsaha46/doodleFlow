@@ -375,6 +375,46 @@ useEffect(()=>{
   };
 
 
+
+
+  const resizeElement = (element: Element, handle: string, dx: number, dy: number): Element => {
+    const newElement = { ...element };
+    
+    switch (handle) {
+      case 'tl':
+        newElement.startX += dx;
+        newElement.startY += dy;
+        break;
+      case 'tr':
+        newElement.endX += dx;
+        newElement.startY += dy;
+        break;
+      case 'bl':
+        newElement.startX += dx;
+        newElement.endY += dy;
+        break;
+      case 'br':
+        newElement.endX += dx;
+        newElement.endY += dy;
+        break;
+      case 'tm':
+        newElement.startY += dy;
+        break;
+      case 'bm':
+        newElement.endY += dy;
+        break;
+      case 'ml':
+        newElement.startX += dx;
+        break;
+      case 'mr':
+        newElement.endX += dx;
+        break;
+    }
+
+    return newElement;
+  };
+
+
 //   // This function, isPointInElement, determines whether a given point (with coordinates x and y) falls within or near a specified element (such as a rectangle, ellipse, or line). It is typically used for selecting or interacting with drawn elements on a canvas.
 
 //   const isPointInElement = (x: number, y: number, element: Element) => {
