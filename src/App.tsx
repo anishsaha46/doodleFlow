@@ -142,7 +142,7 @@ useEffect(()=>{
 
 
 
-  
+
   const redrawCanvas = () => {
     if(!ctx || !canvasRef.current) return ;
     ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
@@ -336,6 +336,42 @@ useEffect(()=>{
     ctx.arc(centerX, rotationHandleY, handleSize / 2, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
+  };
+
+
+
+
+
+  const getResizeHandle = (x: number, y: number, element: Element): string | null => {
+    const padding = 5;
+    const handleSize = 8;
+    const minX = Math.min(element.startX, element.endX) - padding;
+    const maxX = Math.max(element.startX, element.endX) + padding;
+    const minY = Math.min(element.startY, element.endY) - padding;
+    const maxY = Math.max(element.startY, element.endY) + padding;
+    const centerX = (minX + maxX) / 2;
+    const centerY = (minY + maxY) / 2;
+
+    const handles = [
+      { x: minX, y: minY, id: 'tl' },
+      { x: maxX, y: minY, id: 'tr' },
+      { x: minX, y: maxY, id: 'bl' },
+      { x: maxX, y: maxY, id: 'br' },
+      { x: centerX, y: minY, id: 'tm' },
+      { x: centerX, y: maxY, id: 'bm' },
+      { x: minX, y: centerY, id: 'ml' },
+      { x: maxX, y: centerY, id: 'mr' },
+      { x: centerX, y: minY - 20, id: 'rotate' },
+    ];
+
+    for (const handle of handles) {
+      const dx = x - handle.x;
+      const dy = y - handle.y;
+      if (dx * dx + dy * dy <= handleSize * handleSize) {
+        return handle.id;
+      }
+    }
+    return null;
   };
 
 
