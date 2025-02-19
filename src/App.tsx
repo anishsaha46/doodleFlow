@@ -140,6 +140,9 @@ useEffect(()=>{
   }, []);
 
 
+
+
+  
   const redrawCanvas = () => {
     if(!ctx || !canvasRef.current) return ;
     ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
@@ -155,6 +158,9 @@ useEffect(()=>{
       drawElement(currentElement);
     }
   };
+
+
+
 
 
 
@@ -237,6 +243,9 @@ useEffect(()=>{
 
 
 
+
+
+
   const drawArrow = (
     ctx: CanvasRenderingContext2D,
     startX: number,
@@ -277,6 +286,11 @@ useEffect(()=>{
   };
 
 
+
+
+
+
+
   const drawResizeHandles = (element: Element) => {
     if (!ctx) return;
 
@@ -303,9 +317,26 @@ useEffect(()=>{
       { x: minX, y: centerY, cursor: 'w-resize', id: 'ml' },
       { x: maxX, y: centerY, cursor: 'e-resize', id: 'mr' },
     ];
-  };
 
-  }
+    handles.forEach(handle => {
+      ctx.beginPath();
+      ctx.arc(handle.x, handle.y, handleSize / 2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+    });
+
+    // Draw rotation handle
+    const rotationHandleY = minY - 20;
+    ctx.beginPath();
+    ctx.moveTo(centerX, minY);
+    ctx.lineTo(centerX, rotationHandleY);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(centerX, rotationHandleY, handleSize / 2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+  };
 
 
 //   // This function, isPointInElement, determines whether a given point (with coordinates x and y) falls within or near a specified element (such as a rectangle, ellipse, or line). It is typically used for selecting or interacting with drawn elements on a canvas.
