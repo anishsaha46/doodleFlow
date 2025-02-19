@@ -157,7 +157,7 @@ useEffect(()=>{
   };
 
 
-  
+
   const drawElement = (element: Element) => {
     if (!ctx) return;
 
@@ -234,6 +234,49 @@ useEffect(()=>{
 
     ctx.restore();
   };
+
+  
+
+  const drawArrow = (
+    ctx: CanvasRenderingContext2D,
+    startX: number,
+    startY: number,
+    endX: number,
+    endY: number,
+    color: string
+  ) => {
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+
+    // Draw the line
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
+    ctx.lineTo(endX, endY);
+    ctx.stroke();
+
+    // Calculate the arrow head
+    const angle = Math.atan2(endY - startY, endX - startX);
+    const arrowLength = 20;
+    const arrowWidth = 8;
+
+    // Draw the arrow head
+    ctx.beginPath();
+    ctx.moveTo(endX, endY);
+    ctx.lineTo(
+      endX - arrowLength * Math.cos(angle - Math.PI / arrowWidth),
+      endY - arrowLength * Math.sin(angle - Math.PI / arrowWidth)
+    );
+    ctx.lineTo(
+      endX - arrowLength * Math.cos(angle + Math.PI / arrowWidth),
+      endY - arrowLength * Math.sin(angle + Math.PI / arrowWidth)
+    );
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  };
+
+
 
 //   // This function, isPointInElement, determines whether a given point (with coordinates x and y) falls within or near a specified element (such as a rectangle, ellipse, or line). It is typically used for selecting or interacting with drawn elements on a canvas.
 
