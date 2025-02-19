@@ -292,6 +292,17 @@ useEffect(()=>{
     ctx.fillStyle = '#4299e1';
     ctx.strokeStyle = '#fff';
     ctx.lineWidth = 2;
+
+    const handles = [
+      { x: minX, y: minY, cursor: 'nw-resize', id: 'tl' },
+      { x: maxX, y: minY, cursor: 'ne-resize', id: 'tr' },
+      { x: minX, y: maxY, cursor: 'sw-resize', id: 'bl' },
+      { x: maxX, y: maxY, cursor: 'se-resize', id: 'br' },
+      { x: centerX, y: minY, cursor: 'n-resize', id: 'tm' },
+      { x: centerX, y: maxY, cursor: 's-resize', id: 'bm' },
+      { x: minX, y: centerY, cursor: 'w-resize', id: 'ml' },
+      { x: maxX, y: centerY, cursor: 'e-resize', id: 'mr' },
+    ];
   };
 
   }
