@@ -235,7 +235,7 @@ useEffect(()=>{
     ctx.restore();
   };
 
-  
+
 
   const drawArrow = (
     ctx: CanvasRenderingContext2D,
@@ -276,6 +276,25 @@ useEffect(()=>{
     ctx.restore();
   };
 
+
+  const drawResizeHandles = (element: Element) => {
+    if (!ctx) return;
+
+    const padding = 5;
+    const handleSize = 8;
+    const minX = Math.min(element.startX, element.endX) - padding;
+    const maxX = Math.max(element.startX, element.endX) + padding;
+    const minY = Math.min(element.startY, element.endY) - padding;
+    const maxY = Math.max(element.startY, element.endY) + padding;
+    const centerX = (minX + maxX) / 2;
+    const centerY = (minY + maxY) / 2;
+
+    ctx.fillStyle = '#4299e1';
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+  };
+
+  }
 
 
 //   // This function, isPointInElement, determines whether a given point (with coordinates x and y) falls within or near a specified element (such as a rectangle, ellipse, or line). It is typically used for selecting or interacting with drawn elements on a canvas.
