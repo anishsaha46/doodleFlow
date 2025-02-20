@@ -513,6 +513,17 @@ useEffect(()=>{
   };
 
 
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    const rect = canvasRef.current?.getBoundingClientRect();
+    if (rect) {
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      socket.emit('cursorMove', { x, y });
+    }
+    draw(e);
+  };
+
 //   // This function, isPointInElement, determines whether a given point (with coordinates x and y) falls within or near a specified element (such as a rectangle, ellipse, or line). It is typically used for selecting or interacting with drawn elements on a canvas.
 
 //   const isPointInElement = (x: number, y: number, element: Element) => {
