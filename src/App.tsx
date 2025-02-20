@@ -456,6 +456,41 @@ useEffect(()=>{
   };
 
 
+
+  const draw = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+    if (!isDrawing || !ctx || !canvasRef.current || !currentElement) return;
+
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+
+    let updatedElement = { ...currentElement };
+
+    if (resizeHandle && selectedElement) {
+      updatedElement = resizeElement(selectedElement, resizeHandle, x - currentElement.endX, y - currentElement.endY);
+    } else if (isRotating && selectedElement) {
+      const centerX = (selectedElement.startX + selectedElement.endX) / 2;
+      const centerY = (selectedElement.startY + selectedElement.endY) / 2;
+      const angle = Math.atan2(y - centerY, x - centerX) - initialAngle;
+      updatedElement = { ...selectedElement, rotation: angle };
+    } else {
+      if (currentTool === 'freehand' && updatedElement.points) {
+        updatedElement.points.push([x, y]);
+      } else {
+        updatedElement.endX = x;
+        updatedElement.endY = y;
+      }
+    }
+
+    setCurrentElement(updatedElement);
+    redrawCanvas();
+  };
+
+
+
 //   // This function, isPointInElement, determines whether a given point (with coordinates x and y) falls within or near a specified element (such as a rectangle, ellipse, or line). It is typically used for selecting or interacting with drawn elements on a canvas.
 
 //   const isPointInElement = (x: number, y: number, element: Element) => {
