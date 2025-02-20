@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Square, Circle, Minus, Edit3, Type, Undo2, Download, MousePointer, Palette, Users, Save, Upload, ArrowRight } from 'lucide-react';
+import { Square, Circle, Minus, Edit3, Type, MousePointer, Palette, Users, ArrowRight, Download, Undo2 } from 'lucide-react';
 import { io } from 'socket.io-client';
 
 interface Element {
@@ -469,6 +469,20 @@ function App() {
     }
   };
 
+  const handleDownload = () => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      const link = document.createElement('a');
+      link.download = 'drawing.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    }
+  };
+
+  const handleUndo = () => {
+    setElements((prevElements) => prevElements.slice(0, -1));
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-2 flex items-center gap-2">
@@ -561,6 +575,20 @@ function App() {
             <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
             <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
           </svg>
+        </button>
+        <button
+          onClick={handleUndo}
+          className="p-2 rounded-md hover:bg-gray-100 transition-colors"
+          title="Undo"
+        >
+          <Undo2 className="w-5 h-5" />
+        </button>
+        <button
+          onClick={handleDownload}
+          className="p-2 rounded-md hover:bg-gray-100 transition-colors"
+          title="Download"
+        >
+          <Download className="w-5 h-5" />
         </button>
       </div>
 
