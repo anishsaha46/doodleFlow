@@ -483,6 +483,28 @@ function App() {
     setElements((prevElements) => prevElements.slice(0, -1));
   };
 
+  const handleClickCanvas = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    const rect = canvasRef.current?.getBoundingClientRect();
+    if (!rect) return;
+
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    // Check if the click is on an element
+    const clickedElement = elements.find(element => {
+      return (
+        x >= element.startX && x <= element.endX &&
+        y >= element.startY && y <= element.endY
+      );
+    });
+
+    if (clickedElement) {
+      setSelectedElement(clickedElement);
+    } else {
+      setSelectedElement(null);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-2 flex items-center gap-2">
@@ -612,7 +634,10 @@ function App() {
       <canvas
         ref={canvasRef}
         className="touch-none"
-        onMouseDown={startDrawing}
+        onMouseDown={(e) => {
+          startDrawing(e);
+          handleClickCanvas(e);
+        }}
         onMouseMove={handleMouseMove}
         onMouseUp={stopDrawing}
         onMouseOut={stopDrawing}
